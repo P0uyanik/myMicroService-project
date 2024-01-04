@@ -1,5 +1,9 @@
 package com.pouya.inventoryservice.service;
 
+import com.pouya.inventoryservice.dto.InventoryResponse;
+
+import java.util.List;
+
 public interface InventoryService {
-    boolean isInStock (String skuCode) ;
+    List <InventoryResponse>  isInStock (List<String> skuCode) ;
 }
