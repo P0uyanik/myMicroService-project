@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClient;
 
     @Override
     public void placeOrder(List<OrderLineItems> orderAsList) {
@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderNumber(UUID.randomUUID().toString());
         order.setOrderLineItems(orderAsList);
         Stream<String> skuCodes = order.getOrderLineItems().stream().map(OrderLineItems::getSkuCode);
-        InventoryResponse[] inventoryResponses = webClient.get().uri("http://localhost:8082/api/inventory"
+        InventoryResponse[] inventoryResponses = webClient.build().get().uri("http://inventory-service/api/inventory"
                         , uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
                 .retrieve()
                 .bodyToMono(InventoryResponse[].class).block();
